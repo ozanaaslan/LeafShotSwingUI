@@ -4,6 +4,7 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.ozanaaslan.leafshot.model.DrawingStroke;
 import com.github.ozanaaslan.leafshot.model.Tool;
 import com.github.ozanaaslan.leafshot.util.TransferableImage;
+import com.github.ozanaaslan.leafshot.util.UploadHandler;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -53,18 +54,39 @@ public class ScreenshotWindow extends javax.swing.JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_C || (e.isActionKey() && e.getKeyCode() == NativeKeyEvent.VC_C)) copySelectionToClipboard();
-                else if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_U) uploadSelection();
+                else if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_U || (e.isActionKey() && e.getKeyCode() == NativeKeyEvent.VC_U)) uploadSelection();
                 else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) dispose();
             }
         });
     }
 
     private void uploadSelection(){
+        BufferedImage img = getSelectedImage();
+        if (img != null) {
+            new Thread(() -> {
+                String remoteHost = com.github.ozanaaslan.leafshot.LeafShot.getLeafShot().getLeafShotConfig().getRemoteHost();
+                String baseUrl = "http://" + remoteHost + ":8091";
+                UploadHandler handler = new UploadHandler(baseUrl);
+                String imageUrl = handler.uploadImage(img);
 
+                if (imageUrl != null) {
+                    SwingUtilities.invokeLater(() -> {
+                        JTextField textField = new JTextField(imageUrl);
+                        textField.setEditable(false);
+                        JOptionPane.showMessageDialog(null, textField, "Upload Successful - Copy Link", JOptionPane.INFORMATION_MESSAGE);
+                    });
+                } else {
+                    SwingUtilities.invokeLater(() -> {
+                        JOptionPane.showMessageDialog(null, "Upload failed. Check console for details.", "Upload Error", JOptionPane.ERROR_MESSAGE);
+                    });
+                }
+            }).start();
+            dispose();
+        }
     }
 
-    private void copySelectionToClipboard() {
-        if (selection == null || selection.width <= 2 || selection.height <= 2) return;
+    private BufferedImage getSelectedImage() {
+        if (selection == null || selection.width <= 2 || selection.height <= 2) return null;
 
         BufferedImage finalImg = new BufferedImage(selection.width, selection.height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = finalImg.createGraphics();
@@ -83,6 +105,12 @@ public class ScreenshotWindow extends javax.swing.JFrame {
             g2.draw(s.path);
         }
         g2.dispose();
+        return finalImg;
+    }
+
+    private void copySelectionToClipboard() {
+        BufferedImage finalImg = getSelectedImage();
+        if (finalImg == null) return;
 
         Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new TransferableImage(finalImg), null);
         dispose();
