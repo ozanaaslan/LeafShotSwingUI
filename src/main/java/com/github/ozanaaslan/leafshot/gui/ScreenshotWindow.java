@@ -65,7 +65,7 @@ public class ScreenshotWindow extends javax.swing.JFrame {
         if (img != null) {
             new Thread(() -> {
                 String remoteHost = com.github.ozanaaslan.leafshot.LeafShot.getLeafShot().getLeafShotConfig().getRemoteHost();
-                String baseUrl = "http://" + remoteHost + ":8091";
+                String baseUrl = remoteHost;
                 UploadHandler handler = new UploadHandler(baseUrl);
                 String imageUrl = handler.uploadImage(img);
 
@@ -73,6 +73,8 @@ public class ScreenshotWindow extends javax.swing.JFrame {
                     SwingUtilities.invokeLater(() -> {
                         JTextField textField = new JTextField(imageUrl);
                         textField.setEditable(false);
+                        textField.setFont(new Font(textField.getFont().getName(), Font.PLAIN, 16));
+                        textField.requestFocusInWindow();
                         JOptionPane.showMessageDialog(null, textField, "Upload Successful - Copy Link", JOptionPane.INFORMATION_MESSAGE);
                     });
                 } else {
