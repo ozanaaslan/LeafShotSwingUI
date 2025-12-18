@@ -52,10 +52,14 @@ public class ScreenshotWindow extends javax.swing.JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_C) copySelectionToClipboard();
-                else if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_U) dispose();
+                else if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_U) uploadSelection();
                 else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) dispose();
             }
         });
+    }
+
+    private void uploadSelection(){
+
     }
 
     private void copySelectionToClipboard() {
