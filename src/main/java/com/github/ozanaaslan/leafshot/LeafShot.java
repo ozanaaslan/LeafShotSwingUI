@@ -29,12 +29,38 @@ public class LeafShot implements NativeKeyListener {
             System.exit(1);
         }
 
+        if (System.getProperty("os.name").toLowerCase().contains("mac")) {
+            requestMacPermissions();
+            System.setProperty("apple.awt.UIElement", "true");
+            System.setProperty("apple.laf.useScreenMenuBar", "true");
+        }
         GlobalScreen.addNativeKeyListener(new LeafShot());
         SwingUtilities.invokeLater(LeafShot::setupSystemTray);
         System.out.println("LeafShot is running in background. Press 'Print Screen' to capture.");
     }
 
+
+    private static void requestMacPermissions() {
+        try {
+            String[] script = {
+                    "osascript",
+                    "-e",
+                    "tell application \"System Events\" to set isProcessTrusted to UI elements enabled"
+            };
+            Runtime.getRuntime().exec(script);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Robot robot = new Robot();
+            robot.createScreenCapture(new Rectangle(0, 0, 1, 1));
+        } catch (Exception e) {
+        }
+    }
+
     private static void setupSystemTray() {
+
         if (!SystemTray.isSupported()) {
             System.out.println("SystemTray is not supported");
             return;
