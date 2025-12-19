@@ -1,8 +1,10 @@
 package com.github.ozanaaslan.leafshot.gui;
 
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
+import com.github.ozanaaslan.leafshot.LeafShot;
 import com.github.ozanaaslan.leafshot.model.DrawingStroke;
 import com.github.ozanaaslan.leafshot.model.Tool;
+import com.github.ozanaaslan.leafshot.util.KeybindingUtil;
 import com.github.ozanaaslan.leafshot.util.TransferableImage;
 import com.github.ozanaaslan.leafshot.util.UploadHandler;
 import lombok.Getter;
@@ -53,9 +55,12 @@ public class ScreenshotWindow extends javax.swing.JFrame {
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_C || (e.isActionKey() && e.getKeyCode() == NativeKeyEvent.VC_C)) copySelectionToClipboard();
-                else if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_U || (e.isActionKey() && e.getKeyCode() == NativeKeyEvent.VC_U)) uploadSelection();
-                else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) dispose();
+                String key = KeybindingUtil.normalize(e);
+                if (key.equals(LeafShot.getLeafShot().getLeafShotConfig().get("keybinding.copy"))) {
+                    copySelectionToClipboard();
+                } else if (key.equals(LeafShot.getLeafShot().getLeafShotConfig().get("keybinding.upload"))) {
+                    uploadSelection();
+                }  else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) dispose();
             }
         });
     }

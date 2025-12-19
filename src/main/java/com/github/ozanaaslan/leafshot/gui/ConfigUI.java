@@ -1,9 +1,13 @@
 package com.github.ozanaaslan.leafshot.gui;
 
 import com.github.ozanaaslan.leafshot.util.Config;
+import com.github.ozanaaslan.leafshot.util.KeybindingUtil;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -32,6 +36,9 @@ public class ConfigUI extends JDialog {
                 mainPanel.add(checkBox);
             } else {
                 JTextField field = new JTextField(value);
+                if (key.contains("keybinding"))
+                    KeybindingUtil.attachKeybindingField(field, key, components);
+
                 components.put(key, field);
                 mainPanel.add(field);
             }
@@ -62,4 +69,51 @@ public class ConfigUI extends JDialog {
     private boolean isBoolean(String value) {
         return value != null && (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false"));
     }
+
+    private void setupKeybindingField(JTextField field, String key) {
+        field.setEditable(false);
+
+        KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+
+        KeyEventDispatcher dispatcher = new KeyEventDispatcher() {
+            @Override
+            public boolean dispatchKeyEvent(KeyEvent e) {
+                if (!field.isFocusOwner()) return false;
+                if (e.getID() != KeyEvent.KEY_PRESSED) return true;
+
+                String combo = toKeyCombo(e);
+                field.setText(combo);
+                components.put(key, field);
+
+                return true; // consume
+            }
+        };
+
+        field.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent e) {
+                manager.addKeyEventDispatcher(dispatcher);
+            }
+
+            @Override
+            public void focusLost(java.awt.event.FocusEvent e) {
+                manager.removeKeyEventDispatcher(dispatcher);
+            }
+        });
+    }
+
+    private String toKeyCombo(KeyEvent e) {
+        StringBuilder sb = new StringBuilder();
+
+        if (e.isControlDown()) sb.append("CTRL+");
+        if (e.isAltDown()) sb.append("ALT+");
+        if (e.isShiftDown()) sb.append("SHIFT+");
+        if (e.isMetaDown()) sb.append("META+");
+
+        sb.append(KeyEvent.getKeyText(e.getKeyCode()).toUpperCase());
+
+        return sb.toString();
+    }
+
+
 }

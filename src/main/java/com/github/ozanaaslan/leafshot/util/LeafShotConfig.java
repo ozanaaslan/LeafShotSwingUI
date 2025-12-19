@@ -12,7 +12,11 @@ public class LeafShotConfig extends Config{
     }
     private void init(){
         if(!existing("setup")){
-            set("remote", "127.0.0.1");
+            set("keybinding.screenshot", "F12");
+            set("keybinding.copy", "CTRL+C");
+            set("keybinding.upload", "CTRL+U");
+            set("keybinding.settings", "CTRL+ALT+S");
+            set("remote", "http\\://127.0.0.1\\:8091");
             set("setup", "true");
         }
         this.remoteHost = (String) get("remote", "127.0.0.1");

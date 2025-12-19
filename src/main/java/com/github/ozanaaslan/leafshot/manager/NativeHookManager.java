@@ -4,7 +4,10 @@ import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
+import com.github.ozanaaslan.leafshot.LeafShot;
 import com.github.ozanaaslan.leafshot.gui.ScreenshotWindow;
+import com.github.ozanaaslan.leafshot.util.KeybindingUtil;
+import com.github.ozanaaslan.leafshot.util.LeafShotConfig;
 
 import javax.swing.*;
 import java.util.logging.Level;
@@ -37,8 +40,12 @@ public class NativeHookManager implements NativeKeyListener {
 
     @Override
     public void nativeKeyPressed(NativeKeyEvent e) {
-        if (e.getKeyCode() == NativeKeyEvent.VC_PRINTSCREEN || (e.getKeyCode() == NativeKeyEvent.VC_F3)) {
+        String pressed = KeybindingUtil.normalize(e);
+        if (/*e.getKeyCode() == NativeKeyEvent.VC_PRINTSCREEN || (e.getKeyCode() == NativeKeyEvent.VC_F3)
+                ||*/ pressed.equals(LeafShot.getLeafShot().getLeafShotConfig().get("keybinding.screenshot"))) {
             triggerScreenshot();
+        } else if(pressed.equals(LeafShot.getLeafShot().getLeafShotConfig().get("keybinding.settings"))) {
+            LeafShot.getLeafShot().getLeafShotConfig().showGui();
         }
     }
 
