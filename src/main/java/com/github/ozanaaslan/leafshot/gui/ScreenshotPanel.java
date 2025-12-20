@@ -1,5 +1,7 @@
 package com.github.ozanaaslan.leafshot.gui;
 
+import com.bric.colorpicker.ColorPicker;
+import com.bric.colorpicker.ColorPickerDialog;
 import com.github.ozanaaslan.leafshot.model.DrawingStroke;
 import com.github.ozanaaslan.leafshot.model.Tool;
 
@@ -7,12 +9,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ScreenshotPanel extends JPanel {
     private final ScreenshotWindow parent;
     private final int HANDLE_SIZE = 8;
     private int activeHandle = -1; // -1: none, 0-7: handles, 8: body
     private Point startPoint;
+    private Color penColor = Color.RED;
+    private Color highlighterColor = new Color(255, 255, 0, 120);
     private final Rectangle toolbarBounds = new Rectangle(0, 0, 120, 35);
 
     public ScreenshotPanel(ScreenshotWindow parent) {
@@ -21,7 +26,7 @@ public class ScreenshotPanel extends JPanel {
             @Override
             public void mousePressed(MouseEvent e) {
                 if (parent.getSelection() != null && toolbarBounds.contains(e.getPoint())) {
-                    handleToolbarClick(e.getPoint());
+                    handleToolbarClick(e, e.getPoint());
                     return;
                 }
 
@@ -35,8 +40,8 @@ public class ScreenshotPanel extends JPanel {
                     }
                 } else if (parent.getSelection() != null && parent.getSelection().contains(e.getPoint())) {
                     DrawingStroke currentStroke = (parent.getCurrentTool() == Tool.PEN) ?
-                            new DrawingStroke(Color.RED, new BasicStroke(2f)) :
-                            new DrawingStroke(new Color(255, 255, 0, 120), new BasicStroke(15f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+                            new DrawingStroke(penColor, new BasicStroke(2f)) :
+                            new DrawingStroke(highlighterColor, new BasicStroke(15f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
                     currentStroke.path.moveTo(e.getX(), e.getY());
                     parent.setCurrentStroke(currentStroke);
                     parent.getStrokes().add(currentStroke);
@@ -65,7 +70,6 @@ public class ScreenshotPanel extends JPanel {
                 updateCursorType(e.getPoint());
                 repaint();
             }
-            //TODO-SAVE IMAGES TO DISK & CHANGE COLORS
 
             @Override
             public void mouseMoved(MouseEvent e) {
@@ -76,9 +80,17 @@ public class ScreenshotPanel extends JPanel {
         addMouseMotionListener(adapter);
     }
 
-    private void handleToolbarClick(Point p) {
+    private void handleToolbarClick(MouseEvent e, Point p) {
         int idx = (p.x - toolbarBounds.x) / (toolbarBounds.width / 3);
-        parent.setCurrentTool(Tool.values()[idx]);
+        if(e.getButton() == MouseEvent.BUTTON1) {
+            parent.setCurrentTool(Tool.values()[idx]);
+        } else if(e.getButton() == MouseEvent.BUTTON3) {
+            if(parent.getCurrentTool() == Tool.PEN) {
+                this.penColor = showModernColorPicker(parent, penColor);
+            } else if(parent.getCurrentTool() == Tool.HIGHLIGHTER) {
+                this.highlighterColor = showModernColorPicker(parent, highlighterColor);
+            }
+        }
         repaint();
     }
 
@@ -196,5 +208,35 @@ public class ScreenshotPanel extends JPanel {
                 g2.drawString(labels[i], bx + 5, toolbarBounds.y + 22);
             }
         }
+    }
+
+    public Color showModernColorPicker(Component parent, Color initial) {
+        final Color[] result = {initial};
+
+        // Create modal dialog
+        JDialog dialog = new JDialog(
+                SwingUtilities.getWindowAncestor(parent),
+                "Pick Color",
+                Dialog.ModalityType.APPLICATION_MODAL
+        );
+        dialog.setAlwaysOnTop(true);
+        dialog.setResizable(false);
+
+        // Create the ColorPicker from dheid/colorpicker
+        ColorPicker colorPicker = new ColorPicker(true, true); // show HSV and alpha
+        colorPicker.setColor(initial); // set initial color
+        colorPicker.addColorListener(colorModel -> result[0] = colorModel.getColor());
+
+        // Add picker to dialog
+        dialog.getContentPane().add(colorPicker);
+
+        // Pack and center
+        dialog.pack();
+        dialog.setLocationRelativeTo(parent);
+
+        // Show dialog
+        dialog.setVisible(true);
+
+        return result[0];
     }
 }

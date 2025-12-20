@@ -57,6 +57,7 @@ public class ConfigUI extends JDialog {
                 }
             });
             config.save();
+            config.reloadConfig(true);
             dispose();
         });
         buttonPanel.add(saveButton);

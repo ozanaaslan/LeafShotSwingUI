@@ -1,6 +1,5 @@
 package com.github.ozanaaslan.leafshot;
 
-import com.github.ozanaaslan.leafshot.gui.ScreenshotWindow;
 import com.github.ozanaaslan.leafshot.manager.NativeHookManager;
 import com.github.ozanaaslan.leafshot.manager.TrayManager;
 import com.github.ozanaaslan.leafshot.util.LeafShotConfig;
