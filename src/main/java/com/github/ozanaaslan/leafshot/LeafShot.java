@@ -35,7 +35,7 @@ public class LeafShot {
         TrayManager trayManager = new TrayManager(nativeHookManager);
         SwingUtilities.invokeLater(trayManager::setup);
 
-        System.out.println("LeafShot is running in background. Press 'Print Screen' to capture.");
+        System.out.println("LeafShot is running in background. Press '" + getLeafShotConfig().get("keybinding.screenshot") + "' to capture.");
 
     }
 

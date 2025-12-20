@@ -5,14 +5,15 @@
 
 <p align="center">
     <strong>Capture, Annotate, Copy, and Share.</strong><br>
-    A lightweight FLOSS, cross-platform screenshot utility that feels familiar.
+    A lightweight FLOSS, Windows&Mac screenshot utility that feels familiar.
 </p>
 
 ---
 
 ## Features
 
-*   **Global Hotkey**: Press `Print Screen` to trigger capture mode instantly, no matter which app you're in.
+*   **Global Hotkey**: Press your set hotkey to trigger capture mode instantly, no matter which app you're in.
+*   **Reconfigurable Hotkeys**: Open the settings by pressing its according hotkeys, or open them via the system tray. Then select your desired function you want to rebind, and press your hotkeys. -> click 'Save'  
 *   **Multi-Monitor Support**: Seamlessly captures across all connected displays and virtual desktops.
 *   **Precision Selection**:
     *   Draggable and resizable selection area with 8 distinct anchor points.
@@ -22,8 +23,9 @@
     *    **Pen**: Quick freehand notes in solid red.
     *    **Highlighter**: Emphasize text with opaque yellowish ink.
     *    **Cursor**: Switch back to resize or move your selection area.
-*   **Instant Export**: Press `Ctrl + C` to save the selection (including annotations) directly to your clipboard as a PNG.
-*   **Instant Upload**: Press `Ctrl + U` to upload the selection (including annotations) directly to your remote host.
+*   **Instant Clipboard Copy**: Press `Ctrl + C (by default)` to save the selection (including annotations) directly to your clipboard as a PNG.
+*   **Instant Upload**: Press `Ctrl + U (by default)` to upload the selection (including annotations) directly to your remote host.
+*   **Open Settings**: Press `Ctrl + ALT + S (by default)` to upload the selection (including annotations) directly to your remote host.
 *   **Minimalist Background Operation**: Runs silently in the Windows System Tray or macOS Menu Bar.
 
 ---
