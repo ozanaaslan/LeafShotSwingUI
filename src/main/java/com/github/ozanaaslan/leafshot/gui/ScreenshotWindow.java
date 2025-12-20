@@ -10,10 +10,13 @@ import com.github.ozanaaslan.leafshot.util.UploadHandler;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +28,10 @@ public class ScreenshotWindow extends javax.swing.JFrame {
     @Setter @Getter private Tool currentTool = Tool.CURSOR;
     @Getter private final List<DrawingStroke> strokes = new ArrayList<>();
     @Setter @Getter private DrawingStroke currentStroke = null;
+
+    private long cachedSelectionSize = -1;
+    private Rectangle cachedSelectionBounds = null;
+
 
     public ScreenshotWindow() {
         captureAllScreens();
@@ -122,4 +129,40 @@ public class ScreenshotWindow extends javax.swing.JFrame {
         Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new TransferableImage(finalImg), null);
         dispose();
     }
+
+    public void updateSelectionSizeEstimate() {
+        if (selection == null) {
+            cachedSelectionSize = -1;
+            cachedSelectionBounds = null;
+            return;
+        }
+
+        if (cachedSelectionBounds != null &&
+                cachedSelectionBounds.equals(selection)) {
+            return; // already up to date
+        }
+
+        BufferedImage img = getSelectedImage();
+        if (img == null) return;
+
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            ImageIO.write(img, "png", baos);
+            cachedSelectionSize = baos.size();
+            cachedSelectionBounds = new Rectangle(selection);
+        } catch (IOException ignored) {}
+    }
+
+    public String getCachedSelectionSizeText() {
+        if (cachedSelectionSize <= 0) return "";
+        return formatBytes(cachedSelectionSize);
+    }
+
+    private String formatBytes(long bytes) {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024 * 1024)
+            return String.format("%.1f KB", bytes / 1024.0);
+        return String.format("%.2f MB", bytes / (1024.0 * 1024.0));
+    }
+
+
 }

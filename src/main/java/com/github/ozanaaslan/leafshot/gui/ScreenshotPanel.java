@@ -61,7 +61,9 @@ public class ScreenshotPanel extends JPanel {
             @Override
             public void mouseReleased(MouseEvent e) {
                 parent.setCurrentStroke(null);
+                parent.updateSelectionSizeEstimate();
                 updateCursorType(e.getPoint());
+                repaint();
             }
 
             @Override
@@ -170,7 +172,9 @@ public class ScreenshotPanel extends JPanel {
             }
 
             // Info & Toolbar
-            String dim = selection.width + " x " + selection.height;
+            String size = parent.getCachedSelectionSizeText();
+            String dim = selection.width + " x " + selection.height +
+                    (size.isEmpty() ? "" : "  (~" + size + ")");
             g2.setColor(Color.BLACK);
             g2.drawString(dim, selection.x + 1, selection.y - 9);
             g2.setColor(Color.WHITE);
