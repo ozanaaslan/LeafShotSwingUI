@@ -65,6 +65,7 @@ public class ScreenshotPanel extends JPanel {
                 updateCursorType(e.getPoint());
                 repaint();
             }
+            //TODO-SAVE IMAGES TO DISK & CHANGE COLORS
 
             @Override
             public void mouseMoved(MouseEvent e) {

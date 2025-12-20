@@ -11,14 +11,19 @@ public class LeafShotConfig extends Config{
         init();
     }
     private void init(){
-        if(!existing("setup")){
+        if(!existing("setup") || !(Boolean.parseBoolean((String) get("setup")))){
             set("keybinding.screenshot", "F12");
             set("keybinding.copy", "CTRL+C");
             set("keybinding.upload", "CTRL+U");
+            set("keybinding.save", "CTRL+S");
             set("keybinding.settings", "CTRL+ALT+S");
+            set("keybinding.open.save.destination", "CTRL+ALT+O");
             set("remote", "http\\://127.0.0.1\\:8091");
+            set("save.destination", System.getProperty("user.home") + "/leafshot/");
             set("setup", "true");
         }
+
+
         this.remoteHost = (String) get("remote", "127.0.0.1");
     }
 

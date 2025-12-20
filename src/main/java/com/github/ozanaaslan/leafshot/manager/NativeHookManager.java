@@ -8,8 +8,10 @@ import com.github.ozanaaslan.leafshot.LeafShot;
 import com.github.ozanaaslan.leafshot.gui.ScreenshotWindow;
 import com.github.ozanaaslan.leafshot.util.KeybindingUtil;
 import com.github.ozanaaslan.leafshot.util.LeafShotConfig;
+import lombok.SneakyThrows;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,14 +40,17 @@ public class NativeHookManager implements NativeKeyListener {
         }
     }
 
+    @SneakyThrows
     @Override
     public void nativeKeyPressed(NativeKeyEvent e) {
         String pressed = KeybindingUtil.normalize(e);
         if (/*e.getKeyCode() == NativeKeyEvent.VC_PRINTSCREEN || (e.getKeyCode() == NativeKeyEvent.VC_F3)
-                ||*/ pressed.equals(LeafShot.getLeafShot().getLeafShotConfig().get("keybinding.screenshot"))) {
+                ||*/ pressed.equals(LeafShot.getLeafShot().getLeafShotConfig().get("keybinding.screenshot", "F12"))) {
             triggerScreenshot();
-        } else if(pressed.equals(LeafShot.getLeafShot().getLeafShotConfig().get("keybinding.settings"))) {
+        } else if(pressed.equals(LeafShot.getLeafShot().getLeafShotConfig().get("keybinding.settings", "CTRL+ALT+S"))) {
             LeafShot.getLeafShot().getLeafShotConfig().showGui();
+        } else if(pressed.equals(LeafShot.getLeafShot().getLeafShotConfig().get("keybinding.open.save.destination", "CTRL+ALT+O"))) {
+            Desktop.getDesktop().open(LeafShot.getLeafShot().getSaveDestination());
         }
     }
 

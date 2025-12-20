@@ -1,6 +1,5 @@
 package com.github.ozanaaslan.leafshot.gui;
 
-import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.ozanaaslan.leafshot.LeafShot;
 import com.github.ozanaaslan.leafshot.model.DrawingStroke;
 import com.github.ozanaaslan.leafshot.model.Tool;
@@ -9,13 +8,16 @@ import com.github.ozanaaslan.leafshot.util.TransferableImage;
 import com.github.ozanaaslan.leafshot.util.UploadHandler;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.SneakyThrows;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,13 +65,31 @@ public class ScreenshotWindow extends javax.swing.JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 String key = KeybindingUtil.normalize(e);
-                if (key.equals(LeafShot.getLeafShot().getLeafShotConfig().get("keybinding.copy"))) {
-                    copySelectionToClipboard();
-                } else if (key.equals(LeafShot.getLeafShot().getLeafShotConfig().get("keybinding.upload"))) {
-                    uploadSelection();
-                }  else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) dispose();
+                if (key.equals(LeafShot.getLeafShot().getLeafShotConfig().get("keybinding.copy", "CTRL+C"))) {copySelectionToClipboard();}
+                else if (key.equals(LeafShot.getLeafShot().getLeafShotConfig().get("keybinding.upload", "CTRL+U"))) { uploadSelection();}
+                else if (key.equals(LeafShot.getLeafShot().getLeafShotConfig().get("keybinding.save", "CTRL+S"))) { saveSelection();}
+                else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) dispose();
             }
         });
+    }
+
+    @SneakyThrows
+    private void saveSelection(){
+        BufferedImage finalImg = getSelectedImage();
+        if (finalImg == null) return;
+
+        File file = new File(LeafShot.getLeafShot().getSaveDestination(), "screenshot.png");
+        String name = "screenshot_";
+        String ext = "png";
+        int counter = 1;
+
+        while (file.exists()) {
+            file = new File(LeafShot.getLeafShot().getSaveDestination(),name + counter + "." + ext);
+            counter++;
+        }
+
+        ImageIO.write(finalImg, ext, file);
+        dispose();
     }
 
     private void uploadSelection(){

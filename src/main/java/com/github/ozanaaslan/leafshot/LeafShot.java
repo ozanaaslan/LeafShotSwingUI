@@ -8,11 +8,12 @@ import lombok.Getter;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 
 public class LeafShot {
 
     @Getter private LeafShotConfig leafShotConfig;
-
+    @Getter private File saveDestination;
     @Getter private static LeafShot leafShot;
 
     public LeafShot() {
@@ -22,6 +23,9 @@ public class LeafShot {
 
     private void init(){
         this.leafShotConfig = new LeafShotConfig();
+        this.saveDestination = new File((String)leafShotConfig.get("save.destination", System.getProperty("user.home") + "/leafshot/"));
+        if(!saveDestination.exists())
+            saveDestination.mkdir();
 
         NativeHookManager nativeHookManager = new NativeHookManager();
         nativeHookManager.register();
