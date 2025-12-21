@@ -15,13 +15,15 @@ public class LeafShot {
     @Getter private File saveDestination;
     @Getter private static LeafShot leafShot;
 
-    public LeafShot() {
+    public LeafShot(String[] args) {
         leafShot = this;
-        init();
+        init(args);
     }
 
-    private void init(){
+    private void init(String[] args){
         this.leafShotConfig = new LeafShotConfig();
+        this.leafShotConfig.applyArgOverrides(args);
+
         this.saveDestination = new File((String)leafShotConfig.get("save.destination", System.getProperty("user.home") + "/leafshot/"));
         if(!saveDestination.exists())
             saveDestination.mkdir();
@@ -62,6 +64,6 @@ public class LeafShot {
     }
 
     public static void main(String[] args) {
-        new LeafShot();
+        new LeafShot(args);
     }
 }

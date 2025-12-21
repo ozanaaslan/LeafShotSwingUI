@@ -27,6 +27,19 @@ public class LeafShotConfig extends Config{
         this.remoteHost = (String) get("remote", "127.0.0.1");
     }
 
+    public void applyArgOverrides(String[] args) {
+        if (args == null) return;
+        for (String arg : args) {
+            if (arg.startsWith("-") && arg.contains("=")) {
+                String[] parts = arg.substring(1).split("=", 2);
+                String key = parts[0];
+                String value = parts[1];
+                set(key, value);
+            }
+        }
+    }
+
+
     public void showGui(){
         new ConfigUI(this).setVisible(true);
     }
