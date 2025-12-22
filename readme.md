@@ -1,89 +1,88 @@
 <p align="center">
-  <img src="img.png" alt="LeafShot Preview" width="160">
+  <img src="src/main/resources/LeafShot.png" alt="LeafShot Logo" width="160">
 </p>
 <h3 align="center">LeafShot</h3>
 
 <p align="center">
-    <strong>Capture, Annotate, Copy, and Share.</strong><br>
-    A lightweight FLOSS, Windows&Mac screenshot utility that feels familiar.
+    <strong>A lightweight, Mac&Windows screenshot utility built with Java Swing.</strong><br>
+    Provides tools for screen capture, annotation, and instant sharing.
 </p>
 
 ---
 
-## Features
+### Features
 
-*   **Global Hotkey**: Press your set hotkey to trigger capture mode instantly, no matter which app you're in.
-*   **Reconfigurable Hotkeys**: Open the settings by pressing its according hotkeys, or open them via the system tray. Then select your desired function you want to rebind, and press your hotkeys. -> click 'Save'  
-*   **Multi-Monitor Support**: Seamlessly captures across all connected displays and virtual desktops.
-*   **Precision Selection**:
-    *   Draggable and resizable selection area with 8 distinct anchor points.
-    *   Real-time pixel dimensions display.
-    *   High-contrast "marching ants" border for perfect visibility.
-*   **Built-in Annotation Tools**:
-    *    **Pen**: Quick freehand notes in solid red.
-    *    **Highlighter**: Emphasize text with opaque yellowish ink.
-    *    **Cursor**: Switch back to resize or move your selection area.
-*   **Instant Clipboard Copy**: Press `Ctrl + C (by default)` to save the selection (including annotations) directly to your clipboard as a PNG.
-*   **Instant Upload**: Press `Ctrl + U (by default)` to upload the selection (including annotations) directly to your remote host.
-*   **Open Settings**: Press `Ctrl + ALT + S (by default)` to upload the selection (including annotations) directly to your remote host.
-*   **Minimalist Background Operation**: Runs silently in the Windows System Tray or macOS Menu Bar.
+*   **Global Capture**: Trigger screenshot mode globally using a configurable hotkey (Default: `F12`).
+*   **Flexible Selection**: Draggable and resizable capture area with 8-point handles and real-time dimension display.
+*   **Annotation Tools**:
+    *   **Pen**: Freehand drawing tool.
+    *   **Highlighter**: Semi-transparent marking tool.
+    *   **Color Picker**: Customizable color selection for drawing tools.
+*   **Output Options**:
+    *   **Clipboard**: Copy the selection directly to the system clipboard (Default: `CTRL+C`).
+    *   **Local Save**: Save screenshots to a specified directory with auto-incrementing filenames (Default: `CTRL+S`).
+    *   **Remote Upload**: Upload captures to a remote host via a multipart POST request (Default: `CTRL+U`).
+*   **Configuration**:
+    *   Reconfigurable hotkeys for all major actions.
+    *   Customizable save destinations and remote upload endpoints.
+    *   Settings accessible via hotkey (Default: `CTRL+ALT+S`) or the system tray.
+*   **Multi-Monitor Support**: Captures across all connected displays and virtual desktops.
+*   **Background Operation**: Runs as a background process with a system tray icon (Windows) or menu bar item (macOS).
+
+### Technical Overview
+
+*   **Language**: Java 8+.
+*   **Framework**: Swing & AWT.
+*   **Native Hooks**: Uses `JNativeHook` for global keyboard listening.
+*   **Upload API**: Expects a remote server with a `POST /api/v1/image` endpoint that accepts multipart form-data and returns a JSON object containing an `id` field.
 
 ---
 
-## Prerequisites & Setup
+### Installation & Usage
 
-*   **Runtime**: Java SDK 8 or higher.
-*   **Build Tool**: Maven.
+#### Prerequisites
+*   Java Development Kit (JDK) 8 or higher.
+*   Maven.
 
-### Installation
-
-1.  **Clone the repository**:
+#### Build and Run
+1.  Clone the repository:
     ```bash
     git clone https://github.com/ozanaaslan/LeafShotSwingUI.git
     cd LeafShotSwingUI
     ```
-
-2.  **Build the project**:
+2.  Build the project:
     ```bash
     mvn clean install
     ```
-
-3.  **Run**:
+3.  Execute the application:
     ```bash
     mvn exec:java -Dexec.mainClass="com.github.ozanaaslan.leafshot.LeafShot"
     ```
 
----
-
-## How to Use
-
-1.  **Launch**: Start LeafShot. It will hide in your system's task menu.
-2.  **Trigger**: Press the **Print Screen** key.
-3.  **Select**: Left-click and drag to define your capture area.
-4.  **Annotate**: Use the toolbar at the bottom of the selection to pick a drawing tool.
-5.  **Finish**: Press **Ctrl + C** to copy to clipboard, or **Esc** to discard.
-
----
-
-## Platform Specifics
-
-| Platform | Behavior |
+#### Default Keybindings
+| Action | Keybinding |
 | :--- | :--- |
-| **macOS** | Operates as a `UIElement` (Menu Bar only, no Dock icon). |
-| **Windows** | Resides in the System Tray / Notification Area. |
+| Take Screenshot | `F12` |
+| Copy to Clipboard | `CTRL + C` |
+| Save to Disk | `CTRL + S` |
+| Upload to Server | `CTRL + U` |
+| Open Settings | `CTRL + ALT + S` |
+| Open Save Folder | `CTRL + ALT + O` |
+| Cancel Capture | `ESC` |
 
 ---
 
-## License
+### Platform Specifics
 
-Licensed under
-[Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License][cc-by-nc-sa].
+*   **Windows**: Resides in the System Tray.
+*   **macOS**: Operates as a Menu Bar application (`UIElement` mode). Requires Accessibility permissions for global hotkey functionality.
 
-Commercial use is explicitly prohibited.
-All derivatives must remain under the same license.
+---
 
+### License
 
-[cc-by-nc-sa]: http://creativecommons.org/licenses/by-nc-sa/4.0/
-[cc-by-nc-sa-image]: https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png
-[cc-by-nc-sa-shield]: https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg
+Licensed under the [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-nc-sa/4.0/).
+
+*   Commercial use is prohibited.
+*   Derivatives must be shared under the same license.
 ```

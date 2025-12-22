@@ -18,7 +18,7 @@ public class Config {
 
 
     public Config(String fileName){
-        this(new File(System.getProperty("user.dir") + "/data/" + fileName + ".properties"));
+        this(new File(System.getProperty("user.home") + "/leafshot/data/" + fileName + ".properties"));
         initConfig();
     }
 

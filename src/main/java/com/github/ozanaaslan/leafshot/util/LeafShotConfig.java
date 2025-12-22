@@ -19,7 +19,8 @@ public class LeafShotConfig extends Config{
             set("keybinding.settings", "CTRL+ALT+S");
             set("keybinding.open.save.destination", "CTRL+ALT+O");
             set("remote", "http\\://127.0.0.1\\:8091");
-            set("save.destination", System.getProperty("user.home") + "/leafshot/");
+            set("save.destination", System.getProperty("user.home") + "/leafshot/screenshots");
+            set("data.destination", System.getProperty("user.home") + "/leafshot/");
             set("setup", "true");
         }
 
