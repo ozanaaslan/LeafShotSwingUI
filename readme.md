@@ -15,9 +15,9 @@
 *   **Global Capture**: Trigger screenshot mode globally using a configurable hotkey (Default: `F12`).
 *   **Flexible Selection**: Draggable and resizable capture area with 8-point handles and real-time dimension display.
 *   **Annotation Tools**:
-    *   **Pen**: Freehand drawing tool.
-    *   **Highlighter**: Semi-transparent marking tool.
-    *   **Color Picker**: Customizable color selection for drawing tools.
+    *   **Pen**: Freehand drawing tool. Right-click to change color.
+    *   **Highlighter**: Semi-transparent marking tool. Right-click to change color.
+    *   **Color Picker**: Open a color wheel by right-clicking the Pen or Highlighter tools to customize drawing colors.
 *   **Output Options**:
     *   **Clipboard**: Copy the selection directly to the system clipboard (Default: `CTRL+C`).
     *   **Local Save**: Save screenshots to a specified directory with auto-incrementing filenames (Default: `CTRL+S`).
