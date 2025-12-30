@@ -37,9 +37,10 @@ public class TrayManager {
         popup.addSeparator();
         popup.add(configItem);
         popup.addSeparator();
+        LeafShot.getLeafShot().getEventManager().dispatch(new BeforeTrayFinalize(SystemTray.getSystemTray(), popup));
+        popup.addSeparator();
         popup.add(exitItem);
 
-        LeafShot.getLeafShot().getEventManager().dispatch(new BeforeTrayFinalize(SystemTray.getSystemTray(), popup));
 
         Image iconImage = loadIcon();
         TrayIcon trayIcon = new TrayIcon(iconImage, "LeafShot", popup);

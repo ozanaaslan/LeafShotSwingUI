@@ -177,6 +177,12 @@ public class ModuleManager {
             return o;
         }
 
+        public boolean setExcluded(boolean excluded){
+            this.excluded = excluded;
+            configuration.getProperties().put(this.exclusionKey, Boolean.toString(excluded));
+            return true;
+        }
+
         public void invokePrimary() { load("primaryEntrypoint"); }
         public void invokeSecondary() { load("secondaryEntrypoint"); }
         public void invokeTertiary() { load("tertiaryEntrypoint"); }
