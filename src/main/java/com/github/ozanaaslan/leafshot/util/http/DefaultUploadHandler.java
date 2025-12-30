@@ -1,4 +1,4 @@
-package com.github.ozanaaslan.leafshot.util;
+package com.github.ozanaaslan.leafshot.util.http;
 
 import org.json.JSONObject;
 
@@ -9,11 +9,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Base64;
 
-public class UploadHandler {
+public class DefaultUploadHandler implements IUploadHandler {
 
     private final String baseUrl;
 
-    public UploadHandler(String baseUrl) {
+    public DefaultUploadHandler(String baseUrl) {
         if (baseUrl.endsWith("/")) {
             this.baseUrl = baseUrl.substring(0, baseUrl.length() - 1);
         } else {
@@ -130,5 +130,10 @@ public class UploadHandler {
             }
         }
         return null;
+    }
+
+    @Override
+    public String upload(BufferedImage image) {
+        return uploadImage(image);
     }
 }

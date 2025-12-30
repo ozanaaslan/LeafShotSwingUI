@@ -4,8 +4,10 @@ import com.github.ozanaaslan.leafshot.LeafShot;
 import com.github.ozanaaslan.leafshot.model.DrawingStroke;
 import com.github.ozanaaslan.leafshot.model.Tool;
 import com.github.ozanaaslan.leafshot.util.KeybindingUtil;
+import com.github.ozanaaslan.leafshot.util.LeafShotConfig;
 import com.github.ozanaaslan.leafshot.util.TransferableImage;
-import com.github.ozanaaslan.leafshot.util.UploadHandler;
+import com.github.ozanaaslan.leafshot.util.http.DefaultUploadHandler;
+import com.github.ozanaaslan.leafshot.util.http.IUploadHandler;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
@@ -96,10 +98,7 @@ public class ScreenshotWindow extends javax.swing.JFrame {
         BufferedImage img = getSelectedImage();
         if (img != null) {
             new Thread(() -> {
-                String remoteHost = com.github.ozanaaslan.leafshot.LeafShot.getLeafShot().getLeafShotConfig().getRemoteHost();
-                String baseUrl = remoteHost;
-                UploadHandler handler = new UploadHandler(baseUrl);
-                String imageUrl = handler.uploadImage(img);
+                String imageUrl = LeafShot.getLeafShot().getUploadHandler().upload(img);
 
                 if (imageUrl != null) {
                     SwingUtilities.invokeLater(() -> {

@@ -7,7 +7,7 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 import com.github.ozanaaslan.leafshot.LeafShot;
 import com.github.ozanaaslan.leafshot.gui.ScreenshotWindow;
 import com.github.ozanaaslan.leafshot.util.KeybindingUtil;
-import com.github.ozanaaslan.leafshot.util.LeafShotConfig;
+import com.github.ozanaaslan.leafshot.util.manager.event.NativeKeyPressEvent;
 import lombok.SneakyThrows;
 
 import javax.swing.*;
@@ -44,6 +44,8 @@ public class NativeHookManager implements NativeKeyListener {
     @Override
     public void nativeKeyPressed(NativeKeyEvent e) {
         String pressed = KeybindingUtil.normalize(e);
+        if(LeafShot.getLeafShot().getEventManager().dispatch(new NativeKeyPressEvent(pressed)).isCancelled())
+            return;
         if (/*e.getKeyCode() == NativeKeyEvent.VC_PRINTSCREEN || (e.getKeyCode() == NativeKeyEvent.VC_F3)
                 ||*/ pressed.equals(LeafShot.getLeafShot().getLeafShotConfig().get("keybinding.screenshot", "F12"))) {
             triggerScreenshot();

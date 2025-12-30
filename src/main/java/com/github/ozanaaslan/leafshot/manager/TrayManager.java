@@ -1,7 +1,7 @@
 package com.github.ozanaaslan.leafshot.manager;
 
 import com.github.ozanaaslan.leafshot.LeafShot;
-import com.github.ozanaaslan.leafshot.gui.ConfigUI;
+import com.github.ozanaaslan.leafshot.util.manager.event.BeforeTrayFinalize;
 
 import javax.swing.*;
 import java.awt.*;
@@ -38,6 +38,8 @@ public class TrayManager {
         popup.add(configItem);
         popup.addSeparator();
         popup.add(exitItem);
+
+        LeafShot.getLeafShot().getEventManager().dispatch(new BeforeTrayFinalize(SystemTray.getSystemTray(), popup));
 
         Image iconImage = loadIcon();
         TrayIcon trayIcon = new TrayIcon(iconImage, "LeafShot", popup);

@@ -1,6 +1,8 @@
 package com.github.ozanaaslan.leafshot.util;
 
+import com.github.ozanaaslan.leafshot.LeafShot;
 import com.github.ozanaaslan.leafshot.gui.ConfigUI;
+import com.github.ozanaaslan.leafshot.util.manager.event.OnAppStartupArgs;
 import lombok.Getter;
 
 public class LeafShotConfig extends Config{
@@ -30,6 +32,7 @@ public class LeafShotConfig extends Config{
 
     public void applyArgOverrides(String[] args) {
         if (args == null) return;
+        LeafShot.getLeafShot().getEventManager().dispatch(new OnAppStartupArgs(args));
         for (String arg : args) {
             if (arg.startsWith("-") && arg.contains("=")) {
                 String[] parts = arg.substring(1).split("=", 2);
