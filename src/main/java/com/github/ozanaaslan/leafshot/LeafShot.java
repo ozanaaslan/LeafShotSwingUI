@@ -58,7 +58,11 @@ public class LeafShot {
             System.setProperty("apple.awt.UIElement", "true");
             System.setProperty("apple.laf.useScreenMenuBar", "true");
         }
-
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
 
         this.trayManager = new TrayManager(nativeHookManager);
         getEventManager().dispatch(new AfterTrayFinalize(this.trayManager));
